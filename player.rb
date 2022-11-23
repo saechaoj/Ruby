@@ -7,8 +7,6 @@ class Player
     require_relative "history"
     attr_reader :name, :history
 
-    @@name
-    @@history
 
     #Constructor
     def initialize(name,history)
@@ -32,7 +30,9 @@ class StupidBot < Player
     #Overriding Method
 
     def play()
-        return "Rock","Rock"
+
+        history.log_opponent_play(Rock.new("Rock"))
+        return Rock.new("Rock")
         end
    
         
@@ -43,20 +43,26 @@ end
 #Sub Class
 class RandomBot < Player
 
+
     #Overriding Method
 
     def play()
         num = rand(1..5)
         if num == 1
-            return 'Rock','Rock'
+            history.log_opponent_play(Rock.new("Rock"))
+            return Rock.new("Rock")
         elsif num == 2
-            return "Paper","Paper"
+            history.log_opponent_play(Paper.new("Paper"))
+            return Paper.new("Paper")
         elsif num == 3
-            return "Scissors","Scissors"
+            history.log_opponent_play(Scissors.new("Scissors"))
+            return Scissors.new("Scissors")
         elsif num == 4
-            return "Lizard","Lizard"
+            history.log_opponent_play(Lizard.new("Lizard"))
+            return Lizard.new("Lizard")
         elsif num == 5
-            return "Spock","Spock"
+            history.log_opponent_play(Spock.new("Spock"))
+            return Spock.new("Spock")
         end
 
     end
@@ -72,26 +78,26 @@ class IterativeBot < Player
     def play()
 
 
-        num = 1
-        while num  >= 0
-
-            if num == 1
-                num = num + 1
-                return 'Rock','Rock'
-            elsif num == 2
-                num = num + 1
-                return "Paper","Paper"
-            elsif num == 3
-                num = num + 1
-                return "Scissors","Scissors"
-            elsif num == 4
-                num = num + 1
-                return "Lizard","Lizard"
-            elsif num == 5
-                return "Spock","Spock"
-            end
-
+        num = history.opponent_plays.length
+        num = num + 1
+        if num == 1
+            history.log_opponent_play(Rock.new("Rock"))
+            return Rock.new("Rock")
+        elsif num == 2
+            history.log_opponent_play(Paper.new("Paper"))
+            return Paper.new("Paper")
+        elsif num == 3
+            history.log_opponent_play(Scissors.new("Scissors"))
+            return Scissors.new("Scissors")
+        elsif num == 4
+            history.log_opponent_play(Lizard.new("Lizard"))
+            return Lizard.new("Lizard")
+        elsif num == 5
+            history.log_opponent_play(Spock.new("Spock"))
+            return Spock.new("Spock")
         end
+
+
 
     end
 
@@ -105,10 +111,10 @@ class LastPlayBot < Player
 
     def play()
         
-        if @history == NULL
-            return 'Rock','Rock'
+        if history.plays.empty?
+            return Rock.new("Rock")
         else
-            return @history, @history
+            return history.plays[-1]
         end
 
     end
@@ -121,19 +127,50 @@ class Human < Player
 
     #Overriding Method
 
-    def play()
-        puts '(1)Rock'
-        puts '(2)Paper'
-        puts '(3)Scissors'
-        puts '(4)Lizard'
-        puts '(5)Spock'
-        puts 'Enter your move : '
-        choice = gets
 
-        if choice > 5
-            puts "Invalid choice select again!"
-        
+    def play()
+
+        i = 1
+
+        while i > 0
+
+            puts "Choose your move"
+            puts '(1)Rock'
+            puts '(2)Paper'
+            puts '(3)Scissors'
+            puts '(4)Lizard'
+            puts '(5)Spock'
+            puts 'Enter your move : '
+            choice = gets.to_i
+
+            if choice == 0 || choice > 5
+                puts "Invalid move, try again"
+
+            else
+                
+
+                if choice == 1
+                    history.log_play(Rock.new("Rock"))
+                    return Rock.new("Rock")
+                elsif choice == 2
+                    history.log_play(Paper.new("Paper"))
+                    return Paper.new("Paper")
+                elsif choice == 3
+                    history.log_play(Scissors.new("Scissors"))
+                    return Scissors.new("Scissors")
+                elsif choice == 4
+                    history.log_play(Lizard.new("Lizard"))
+                    return Lizard.new("Lizard")
+                elsif choice  == 5
+                    history.log_play(Spock.new("Spock"))
+                    return Spock.new("Spock")
+                end
+    
+      
+            end
         end
+
+    
     end
      
 end
@@ -141,5 +178,12 @@ end
 
 
 
-s = Human.new("Rock","History")
-puts s.play()
+#Test
+# p1 = StupidBot.new('StupidBot', History.new)
+# p2 = RandomBot.new('RandomBot', History.new)
+# p1move = p1.play()
+# p2move = p2.play()
+
+
+# puts p1move.compare_to(p2move)
+

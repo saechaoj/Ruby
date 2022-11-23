@@ -4,9 +4,9 @@ class History
     #Class variable and accessor
     attr_accessor :plays, :opponent_plays, :score
 
-    @@plays
-    @@opponent_plays
-    @@score
+    @plays = []
+    @opponent_plays = []
+    @score = []
 
     #Constructor
     def initialize()
